@@ -13,7 +13,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # Install Node
+      # =========================
+      # Setup Node
+      # =========================
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
@@ -35,14 +37,22 @@ jobs:
         run: docker build -t myapp .
 
       # =========================
-      # 3️⃣ Run Container
+      # 3️⃣ Start services (docker compose)
       # =========================
-      - name: Start Container
-        run: docker run -d -p 3000:3000 --name test-container myapp
+      - name: Start Docker Compose
+        run: docker compose -f docker-compose.test.yml up -d
 
-      # Đợi server boot
+      # Wait until app is ready
       - name: Wait for app
-        run: sleep 5
+        run: |
+          for i in {1..15}; do
+            if curl -s http://localhost:3000 > /dev/null; then
+              echo "App is ready"
+              break
+            fi
+            echo "Waiting for app..."
+            sleep 3
+          done
 
       # =========================
       # 4️⃣ E2E Test
@@ -50,7 +60,9 @@ jobs:
       - name: Run E2E Tests
         run: npm run test:e2e
 
+      # =========================
       # Cleanup
-      - name: Stop Container
+      # =========================
+      - name: Stop Docker Compose
         if: always()
-        run: docker stop test-container
+        run: docker compose -f docker-compose.test.yml down

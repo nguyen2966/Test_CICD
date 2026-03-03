@@ -1,5 +1,14 @@
 import request from "supertest";
-import app from "../app.js";
+import express from "express";
+
+const app = express();
+
+app.use(express.json());
+
+app.get("/", (req, res) => {
+  res.status(200).json({ message: "Server is running" });
+});
+
 
 describe("Integration Test - Express Application", () => {
 

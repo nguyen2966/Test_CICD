@@ -4,11 +4,12 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "test:integration": "jest tests/integration",
+    "test:e2e": "jest tests/e2e",
     "start": "node index.js"
   },
-  "jest":{
-    "testEnvironment":"node"
+  "jest": {
+    "testEnvironment": "node"
   },
   "author": "",
   "license": "ISC",
@@ -20,6 +21,7 @@
   },
   "devDependencies": {
     "jest": "^30.2.0",
+    "node-fetch": "^3.3.2",
     "supertest": "^7.2.2"
   }
 }

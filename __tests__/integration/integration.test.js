@@ -9,6 +9,15 @@ app.get("/", (req, res) => {
   res.status(200).json({ message: "Server is running" });
 });
 
+app.post("/sum", (req, res) => {
+  const { a, b } = req.body;
+
+  if (a === undefined || b === undefined) {
+    return res.status(400).json({ error: "Missing parameters" });
+  }
+
+  res.status(200).json({ result: a + b });
+});
 
 describe("Integration Test - Express Application", () => {
 
